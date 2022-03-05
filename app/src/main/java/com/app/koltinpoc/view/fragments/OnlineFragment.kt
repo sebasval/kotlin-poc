@@ -34,7 +34,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             when (dataHandler) {
                 is DataHandler.SUCCESS -> {
                     binding.progressBar.visibility = View.GONE
-                    newsAdapter.differ.submitList(dataHandler.data?.articles)
+//                    newsAdapter.differ.submitList(dataHandler.data?.articles)
                 }
                 is DataHandler.ERROR -> {
                     binding.progressBar.visibility = View.GONE
