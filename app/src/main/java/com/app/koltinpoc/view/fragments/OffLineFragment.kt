@@ -29,21 +29,6 @@ class OffLineFragment : Fragment(R.layout.fragment_offline) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentOfflineBinding.bind(view)
         init()
-
-        viewModel.article.observe(viewLifecycleOwner, Observer { dataHandler ->
-            when (dataHandler) {
-                is DataHandler.SUCCESS -> {
-                    LogData("onViewCreated: SUCCESS  ${dataHandler.data?.get(0)?.title} ")
-                    newsAdapter.differ.submitList(dataHandler.data)
-                }
-                is DataHandler.ERROR -> {
-                    LogData("onViewCreated: ERROR ${dataHandler.message}")
-                }
-                is DataHandler.LOADING -> {
-                    LogData("onViewCreated: LOADING")
-                }
-            }
-        })
     }
 
     private fun init() {

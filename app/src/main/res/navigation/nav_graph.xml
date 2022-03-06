@@ -38,7 +38,7 @@
         tools:layout="@layout/fragment_article_details" >
         <argument
             android:name="article_data"
-            app:argType="com.app.koltinpoc.model.Article"
+            app:argType="com.app.koltinpoc.model.RedditListInfo"
             app:nullable="true" />
     </fragment>
 </navigation>

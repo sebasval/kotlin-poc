@@ -1,27 +1,30 @@
 package com.app.koltinpoc.view.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.koltinpoc.R
 import com.app.koltinpoc.databinding.AdapterNewsItemBinding
 import com.app.koltinpoc.model.Article
+import com.app.koltinpoc.model.RedditListInfo
 import com.app.koltinpoc.utils.loadImageFromGlide
 import javax.inject.Inject
 
-class NewsAdapter @Inject constructor() : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
+class NewsAdapter @Inject constructor(val context: Context) :
+    RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: AdapterNewsItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    private val diffUtil = object : DiffUtil.ItemCallback<Article>() {
-        override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
-
-            return oldItem.title == newItem.title
+    private val diffUtil = object : DiffUtil.ItemCallback<RedditListInfo>() {
+        override fun areItemsTheSame(oldItem: RedditListInfo, newItem: RedditListInfo): Boolean {
+            return oldItem.data.title == newItem.data.title
         }
 
-        override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
+        override fun areContentsTheSame(oldItem: RedditListInfo, newItem: RedditListInfo): Boolean {
             return oldItem == newItem
         }
 
@@ -38,15 +41,15 @@ class NewsAdapter @Inject constructor() : RecyclerView.Adapter<NewsAdapter.ViewH
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val article = differ.currentList[position]
         holder.binding.apply {
-            ivArticle.loadImageFromGlide(article.urlToImage)
-            tvTitle.text = article.title
-            tvDescription.text = article.description
-            tvSource.text = article.author
-            tvPublished.text = article.publishedAt
-
+            ivArticle.loadImageFromGlide(article.data.thumbnail)
+            tvTitle.text = article.data.title
+            tvDescription.text = article.data.subreddit
+            val comments = "${article.data.commentsCount} Commented this post"
+            tvPublished.text = comments
         }
 
         holder.itemView.setOnClickListener {
+            holder.binding.tvSource.text = context.getString(R.string.read_post)
             setArticleClickListener?.let {
                 it(article)
             }
@@ -58,9 +61,9 @@ class NewsAdapter @Inject constructor() : RecyclerView.Adapter<NewsAdapter.ViewH
         return differ.currentList.size
     }
 
-    private var setArticleClickListener : ((article: Article)->Unit)? =null
+    private var setArticleClickListener: ((article: RedditListInfo) -> Unit)? = null
 
-    fun onArticleClicked(listener:(Article)->Unit){
-        setArticleClickListener =listener
+    fun onArticleClicked(listener: (RedditListInfo) -> Unit) {
+        setArticleClickListener = listener
     }
 }

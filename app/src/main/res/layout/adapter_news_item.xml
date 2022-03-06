@@ -15,7 +15,6 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:textSize="15sp"
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -28,13 +27,13 @@
         android:maxLines="2"
         android:text="TextView"
         android:textColor="@color/cardview_dark_background"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_article"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:textSize="13sp"
         android:id="@+id/tv_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -45,6 +44,7 @@
         android:layout_marginRight="8dp"
         android:ellipsize="end"
         android:text="TextView"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_article"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_article"
@@ -58,10 +58,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="TextView"
+        android:text="@string/unread"
         android:textColor="#3448B5"
-        android:textStyle="bold"
         android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_published"
         app:layout_constraintHorizontal_bias="0.5"
@@ -79,8 +79,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="TextView"
-        android:textStyle="bold"
         android:textSize="11sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

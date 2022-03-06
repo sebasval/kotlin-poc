@@ -15,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ArticleDetailsFragment : Fragment(R.layout.fragment_article_details) {
 
-    val TAG = "ArticleDetailsFragment"
     val viewModel: OfflineViewModel by viewModels()
 
     private lateinit var binding: FragmentArticleDetailsBinding
@@ -30,14 +29,11 @@ class ArticleDetailsFragment : Fragment(R.layout.fragment_article_details) {
         binding.webview.apply {
             webChromeClient = WebChromeClient()
             article?.let { data ->
-                loadUrl(data.url!!)
+                loadUrl(data.data.thumbnail)
             }
         }
 
         binding.fab.setOnClickListener {
-            if (article != null) {
-                viewModel.insertArticle(article)
-            }
             Snackbar.make(binding.root, "Article Saved ", Snackbar.LENGTH_LONG).show()
         }
 

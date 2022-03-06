@@ -34,7 +34,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             when (dataHandler) {
                 is DataHandler.SUCCESS -> {
                     binding.progressBar.visibility = View.GONE
-//                    newsAdapter.differ.submitList(dataHandler.data?.articles)
+                    newsAdapter.differ.submitList(dataHandler.data?.data?.children)
                 }
                 is DataHandler.ERROR -> {
                     binding.progressBar.visibility = View.GONE
@@ -57,7 +57,6 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
         newsAdapter.onArticleClicked {
             val bundle = Bundle().apply {
                 putParcelable("article_data", it)
-
             }
             findNavController().navigate(
                 R.id.action_onlineFragment_to_articleDetailsFragment,
