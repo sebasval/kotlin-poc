@@ -21,9 +21,5 @@ class HomeFragment :Fragment(R.layout.fragment_home) {
         binding.btnOnline.setOnClickListener{
             findNavController().navigate(R.id.action_homeFragment_to_onlineFragment)
         }
-
-        binding.btnOffline.setOnClickListener{
-            findNavController().navigate(R.id.action_homeFragment_to_offLineFragment)
-        }
     }
 }

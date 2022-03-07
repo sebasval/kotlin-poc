@@ -10,22 +10,10 @@
         android:id="@+id/btn_online"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Online"
-        app:layout_constraintBottom_toTopOf="@+id/btn_offline"
+        android:layout_marginTop="288dp"
+        android:text="@string/fetch_info"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
-
-    <Button
-        android:id="@+id/btn_offline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Offline"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_online" />
 </androidx.constraintlayout.widget.ConstraintLayout>

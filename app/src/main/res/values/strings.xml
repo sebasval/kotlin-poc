@@ -2,4 +2,5 @@
     <string name="app_name">KoltinPOC</string>
     <string name="unread">Unread</string>
     <string name="read_post">Read Post</string>
+    <string name="fetch_info">Fetch Info</string>
 </resources>

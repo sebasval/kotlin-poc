@@ -1,5 +1,6 @@
 package com.app.koltinpoc.di
 
+import androidx.lifecycle.LiveData
 import com.app.koltinpoc.db.entity.ArticleEntity
 import com.app.koltinpoc.db.entity.RedittInfoEntity
 import com.app.koltinpoc.db.entity.SourceEntity
@@ -16,7 +17,7 @@ import com.app.koltinpoc.model.Source
 * */
 object Transformer {
 
-    fun convertRedditInfoListToRedditInfoTableList(redditInfoList: RedditListInfo): RedittInfoEntity {
+    fun convertRedditInfoToRedditInfoEntity(redditInfoList: RedditListInfo): RedittInfoEntity {
         return redditInfoList.let {
             RedittInfoEntity(
                 articleUrl = it.data.thumbnail,
@@ -26,6 +27,21 @@ object Transformer {
                 commentsCount = it.data.commentsCount.toString()
             )
         }
+    }
+
+    fun convertEntityRedditListToRedditInfoList(redditInfoList: List<RedittInfoEntity>): List<RedditListInfo> {
+        val redditList = redditInfoList?.map {
+            RedditListInfo(
+                kind = "",
+                data = RedditDetailsInfo(
+                    title = it.title!!,
+                    subreddit = it.description!!,
+                    thumbnail = it.articleUrl!!,
+                    commentsCount = it.commentsCount.toLong()
+                )
+            )
+        }
+         return redditList!!
     }
 
     fun convertArticleModelToArticleEntity(article: Article): ArticleEntity {
