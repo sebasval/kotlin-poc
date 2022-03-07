@@ -40,6 +40,13 @@ class OnlineViewModel @Inject constructor(
         }
     }
 
+     fun getAllLocalRedditInfo() {
+         _topHeadlines.postValue(DataHandler.LOADING())
+        viewModelScope.launch(Dispatchers.IO) {
+            _topHeadlines.postValue(DataHandler.SUCCESS(dbRepository.getAllRedditInfo()))
+        }
+    }
+
     private fun saveRedditInfo(redditInfo: RedditInfo) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = dbRepository.insertRedditInfo(redditInfo)) {

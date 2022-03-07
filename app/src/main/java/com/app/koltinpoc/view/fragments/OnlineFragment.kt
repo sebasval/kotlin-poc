@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.koltinpoc.R
 import com.app.koltinpoc.databinding.FragmentOnlineBinding
@@ -25,10 +26,14 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
     val viewModel: OnlineViewModel by viewModels()
 
+    val args: OnlineFragmentArgs by navArgs()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentOnlineBinding.bind(view)
         init()
+
+        val state = arguments?.getBoolean("delete_state", false)
 
         viewModel.topHeadlines.observe(viewLifecycleOwner, { dataHandler ->
             when (dataHandler) {
@@ -48,8 +53,12 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             }
 
         })
-        viewModel.getTopHeadlines()
 
+        if (state!!.not()) {
+            viewModel.getTopHeadlines()
+        } else {
+            viewModel.getAllLocalRedditInfo()
+        }
     }
 
     private fun init() {

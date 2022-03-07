@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_onlineFragment_to_articleDetailsFragment"
             app:destination="@id/articleDetailsFragment" />
+        <argument
+            android:name="article_online_data"
+            app:argType="boolean"
+            app:nullable="false" />
     </fragment>
     <fragment
         android:id="@+id/offLineFragment"
@@ -40,5 +44,8 @@
             android:name="article_data"
             app:argType="com.app.koltinpoc.model.RedditListInfo"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_detailFragment_to_onlineFragment"
+            app:destination="@id/onlineFragment" />
     </fragment>
 </navigation>

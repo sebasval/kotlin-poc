@@ -15,6 +15,6 @@ interface RedditInfoDao {
     @Query("SELECT * FROM REDDIT")
     fun getAllRedditInfo(): List<RedittInfoEntity>
 
-    @Delete
-    suspend fun delete(articleEntity: RedittInfoEntity)
+    @Query("DELETE FROM REDDIT WHERE description = :subreddit")
+    suspend fun delete(subreddit: String)
 }
