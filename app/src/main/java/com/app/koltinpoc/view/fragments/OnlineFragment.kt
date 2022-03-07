@@ -26,8 +26,6 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
     val viewModel: OnlineViewModel by viewModels()
 
-    val args: OnlineFragmentArgs by navArgs()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentOnlineBinding.bind(view)
@@ -62,6 +60,10 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     }
 
     private fun init() {
+
+        binding.onlineFab.setOnClickListener {
+            viewModel.deleteAllElements()
+        }
 
         newsAdapter.onArticleClicked {
             val bundle = Bundle().apply {

@@ -17,4 +17,7 @@ interface RedditInfoDao {
 
     @Query("DELETE FROM REDDIT WHERE description = :subreddit")
     suspend fun delete(subreddit: String)
+
+    @Query("DELETE FROM REDDIT")
+    suspend fun deleteAll()
 }

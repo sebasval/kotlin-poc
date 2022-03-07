@@ -20,6 +20,15 @@ class DBRepository @Inject constructor(val appDatabase: AppDatabase) {
         }
     }
 
+    suspend fun deleteAllElements(): DataHandler<Unit> {
+        return try {
+            appDatabase.redditInfo().deleteAll()
+            DataHandler.SUCCESS(Unit)
+        } catch (e: IOException) {
+            DataHandler.ERROR(message = "could not delete all elements")
+        }
+    }
+
 
     suspend fun insertRedditInfo(redditInfo: RedditInfo): DataHandler<Unit> {
         return try {

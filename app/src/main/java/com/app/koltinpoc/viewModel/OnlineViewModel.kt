@@ -40,8 +40,8 @@ class OnlineViewModel @Inject constructor(
         }
     }
 
-     fun getAllLocalRedditInfo() {
-         _topHeadlines.postValue(DataHandler.LOADING())
+    fun getAllLocalRedditInfo() {
+        _topHeadlines.postValue(DataHandler.LOADING())
         viewModelScope.launch(Dispatchers.IO) {
             _topHeadlines.postValue(DataHandler.SUCCESS(dbRepository.getAllRedditInfo()))
         }
@@ -53,6 +53,20 @@ class OnlineViewModel @Inject constructor(
                 is DataHandler.SUCCESS -> {
                     val data = dbRepository.getAllRedditInfo()
                     _topHeadlines.postValue(DataHandler.SUCCESS(data))
+                }
+                is DataHandler.ERROR -> {
+                    _topHeadlines.postValue(DataHandler.ERROR(message = result.message.toString()))
+                }
+                else -> {}
+            }
+        }
+    }
+
+    fun deleteAllElements() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = dbRepository.deleteAllElements()) {
+                is DataHandler.SUCCESS -> {
+                    _topHeadlines.postValue(DataHandler.SUCCESS(emptyList()))
                 }
                 is DataHandler.ERROR -> {
                     _topHeadlines.postValue(DataHandler.ERROR(message = result.message.toString()))

@@ -35,4 +35,21 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/onlineFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_x="290dp"
+        android:layout_y="600dp"
+        android:clickable="true"
+        android:backgroundTint="@color/cardview_dark_background"
+        app:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_delete" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
