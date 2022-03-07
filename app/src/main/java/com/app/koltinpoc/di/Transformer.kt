@@ -1,8 +1,11 @@
 package com.app.koltinpoc.di
 
 import com.app.koltinpoc.db.entity.ArticleEntity
+import com.app.koltinpoc.db.entity.RedittInfoEntity
 import com.app.koltinpoc.db.entity.SourceEntity
 import com.app.koltinpoc.model.Article
+import com.app.koltinpoc.model.RedditDetailsInfo
+import com.app.koltinpoc.model.RedditListInfo
 import com.app.koltinpoc.model.Source
 
 /*
@@ -12,6 +15,18 @@ import com.app.koltinpoc.model.Source
 * So it is always a better practice to have transformer classes
 * */
 object Transformer {
+
+    fun convertRedditInfoListToRedditInfoTableList(redditInfoList: RedditListInfo): RedittInfoEntity {
+        return redditInfoList.let {
+            RedittInfoEntity(
+                articleUrl = it.data.thumbnail,
+                title = it.data.title,
+                description = it.data.subreddit,
+                publishedState = false,
+                commentsCount = it.data.commentsCount.toString()
+            )
+        }
+    }
 
     fun convertArticleModelToArticleEntity(article: Article): ArticleEntity {
         return ArticleEntity(
