@@ -38,6 +38,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                 is DataHandler.SUCCESS -> {
                     binding.progressBar.visibility = View.GONE
                     newsAdapter.differ.submitList(dataHandler.data)
+                    binding.swipeRefresh.isRefreshing = false
                 }
                 is DataHandler.ERROR -> {
                     binding.progressBar.visibility = View.GONE
@@ -60,6 +61,10 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     }
 
     private fun init() {
+
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.getTopHeadlines()
+        }
 
         binding.onlineFab.setOnClickListener {
             viewModel.deleteAllElements()

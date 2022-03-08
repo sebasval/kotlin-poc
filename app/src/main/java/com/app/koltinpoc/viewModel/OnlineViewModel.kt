@@ -25,7 +25,6 @@ class OnlineViewModel @Inject constructor(
     val topHeadlines: LiveData<DataHandler<List<RedditListInfo>>> = _topHeadlines
 
     fun getTopHeadlines() {
-        _topHeadlines.postValue(DataHandler.LOADING())
         viewModelScope.launch {
             val response = networkRepository.getTopHeadlines()
             handleResponse(response)
