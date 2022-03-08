@@ -46,10 +46,12 @@ class NewsAdapter @Inject constructor(val context: Context) :
             tvDescription.text = article.data.subreddit
             val comments = "${article.data.commentsCount} Commented this post"
             tvPublished.text = comments
+            if (article.data.readStatus) {
+                tvSource.text = context.getString(R.string.read_post)
+            }
         }
 
         holder.itemView.setOnClickListener {
-            holder.binding.tvSource.text = context.getString(R.string.read_post)
             setArticleClickListener?.let {
                 it(article)
             }

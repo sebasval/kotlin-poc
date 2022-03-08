@@ -35,8 +35,10 @@ class ArticleDetailsFragment : Fragment(R.layout.fragment_article_details) {
             }
         }
 
+        viewModel.updateReadStatus(article!!)
+
         binding.fab.setOnClickListener {
-            viewModel.deleteElement(article!!)
+            viewModel.deleteElement(article)
         }
 
         viewModel.deleteState.observe(viewLifecycleOwner, {

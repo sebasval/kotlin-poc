@@ -37,7 +37,8 @@ object Transformer {
                     title = it.title!!,
                     subreddit = it.description!!,
                     thumbnail = it.articleUrl!!,
-                    commentsCount = it.commentsCount.toLong()
+                    commentsCount = it.commentsCount.toLong(),
+                    readStatus = it.publishedState!!
                 )
             )
         }
