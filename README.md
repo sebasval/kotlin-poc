@@ -9,7 +9,7 @@ Retrofit
 Room
 
 ## Architecture pattern
-MVMM
+MVVM
 
 ## Dependency Injection
 Hilt
