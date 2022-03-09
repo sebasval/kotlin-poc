@@ -48,7 +48,7 @@ class DBRepository @Inject constructor(val appDatabase: AppDatabase) {
 
     suspend fun updateElementState(redditListInfo: RedditListInfo): DataHandler<Unit> {
         return try {
-            appDatabase.redditInfo().updateReadStatusElement(redditListInfo.data.subreddit, true)
+            appDatabase.redditInfo().updateReadStatusElement(redditListInfo.data.idElement.toInt(), true)
             DataHandler.SUCCESS(Unit)
         } catch (e: IOException) {
             DataHandler.ERROR(message = e.message.toString())

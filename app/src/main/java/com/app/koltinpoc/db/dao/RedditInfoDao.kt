@@ -21,6 +21,6 @@ interface RedditInfoDao {
     @Query("DELETE FROM REDDIT")
     suspend fun deleteAll()
 
-    @Query("UPDATE REDDIT SET publishedState = :state WHERE description = :subreddit")
-    suspend fun updateReadStatusElement(subreddit: String, state: Boolean)
+    @Query("UPDATE REDDIT SET publishedState = :state WHERE id = :id")
+    suspend fun updateReadStatusElement(id: Int, state: Boolean)
 }

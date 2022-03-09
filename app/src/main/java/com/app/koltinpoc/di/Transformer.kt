@@ -30,7 +30,7 @@ object Transformer {
     }
 
     fun convertEntityRedditListToRedditInfoList(redditInfoList: List<RedittInfoEntity>): List<RedditListInfo> {
-        val redditList = redditInfoList?.map {
+        val redditList = redditInfoList.map {
             RedditListInfo(
                 kind = "",
                 data = RedditDetailsInfo(
@@ -38,11 +38,12 @@ object Transformer {
                     subreddit = it.description!!,
                     thumbnail = it.articleUrl!!,
                     commentsCount = it.commentsCount.toLong(),
-                    readStatus = it.publishedState!!
+                    readStatus = it.publishedState!!,
+                    idElement = it.id.toString()
                 )
             )
         }
-         return redditList!!
+        return redditList
     }
 
     fun convertArticleModelToArticleEntity(article: Article): ArticleEntity {

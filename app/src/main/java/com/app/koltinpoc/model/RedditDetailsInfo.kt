@@ -14,5 +14,6 @@ data class RedditDetailsInfo(
     val thumbnail: String,
     @SerializedName("num_comments")
     val commentsCount: Long,
-    val readStatus: Boolean = false
+    val readStatus: Boolean = false,
+    val idElement: String = ""
 ) : Parcelable
