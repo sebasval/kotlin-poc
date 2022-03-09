@@ -3,6 +3,7 @@ package com.app.koltinpoc.view.fragments
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebChromeClient
+import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +26,7 @@ class ArticleDetailsFragment : Fragment(R.layout.fragment_article_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity?.onBackPressedDispatcher?.addCallback {}
 
         val article = args.articleData
         binding = FragmentArticleDetailsBinding.bind(view)
@@ -39,6 +41,14 @@ class ArticleDetailsFragment : Fragment(R.layout.fragment_article_details) {
 
         binding.fab.setOnClickListener {
             viewModel.deleteElement(article)
+        }
+
+        binding.backToList.setOnClickListener {
+            val bundle = bundleOf("delete_state" to true)
+            findNavController().navigate(
+                R.id.action_detailFragment_to_onlineFragment,
+                bundle
+            )
         }
 
         viewModel.deleteState.observe(viewLifecycleOwner, {
