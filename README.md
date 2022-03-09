@@ -15,7 +15,7 @@ MVVM
 Hilt
 
 ## Reactive programing
-I decide use a live data flow for that :)
+I decide use a courutines for that :)
 
 ## Features
 This app use a reddit API for fetch info and save locally, we can delete all or by element id, so we can update the status read of the element navigating to
