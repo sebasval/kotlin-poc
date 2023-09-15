@@ -3,4 +3,5 @@
     <string name="unread">Unread</string>
     <string name="fetch_info">Fetch Info</string>
     <string name="read_post">Read Post</string>
+    <string name="discover">Discover</string>
 </resources>
