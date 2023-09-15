@@ -1,13 +1,22 @@
 package com.app.koltinpoc.di
 
-import androidx.lifecycle.LiveData
 import com.app.koltinpoc.db.entity.ArticleEntity
-import com.app.koltinpoc.db.entity.RedittInfoEntity
+import com.app.koltinpoc.db.entity.AnimeInfoEntity
 import com.app.koltinpoc.db.entity.SourceEntity
+import com.app.koltinpoc.model.Aired
+import com.app.koltinpoc.model.AnimeData
+import com.app.koltinpoc.model.AnimeInfo
 import com.app.koltinpoc.model.Article
-import com.app.koltinpoc.model.RedditDetailsInfo
-import com.app.koltinpoc.model.RedditListInfo
+import com.app.koltinpoc.model.Broadcast
+import com.app.koltinpoc.model.Date
+import com.app.koltinpoc.model.ImageType
+import com.app.koltinpoc.model.Images
+import com.app.koltinpoc.model.Items
+import com.app.koltinpoc.model.Pagination
+import com.app.koltinpoc.model.Prop
 import com.app.koltinpoc.model.Source
+import com.app.koltinpoc.model.Title
+import com.app.koltinpoc.model.Trailer
 
 /*
 * This is a transformer class
@@ -17,33 +26,90 @@ import com.app.koltinpoc.model.Source
 * */
 object Transformer {
 
-    fun convertRedditInfoToRedditInfoEntity(redditInfoList: RedditListInfo): RedittInfoEntity {
-        return redditInfoList.let {
-            RedittInfoEntity(
-                articleUrl = it.data.thumbnail,
-                title = it.data.title,
-                description = it.data.subreddit,
-                publishedState = false,
-                commentsCount = it.data.commentsCount.toString()
-            )
-        }
+    fun convertAnimeDataToRedditInfoEntity(animeData: AnimeData): AnimeInfoEntity {
+        return AnimeInfoEntity(
+            articleUrl = animeData.images.jpg.imageUrl,
+            title = animeData.title,
+            description = animeData.source,
+            publishedState = animeData.airing,
+            commentsCount = animeData.score.toString()
+        )
     }
 
-    fun convertEntityRedditListToRedditInfoList(redditInfoList: List<RedittInfoEntity>): List<RedditListInfo> {
-        val redditList = redditInfoList.map {
-            RedditListInfo(
-                kind = "",
-                data = RedditDetailsInfo(
-                    title = it.title!!,
-                    subreddit = it.description!!,
-                    thumbnail = it.articleUrl!!,
-                    commentsCount = it.commentsCount.toLong(),
-                    readStatus = it.publishedState!!,
-                    idElement = it.id.toString()
-                )
+    fun convertEntityRedditListToAnimeDataList(animeInfoListEntity: List<AnimeInfoEntity>): List<AnimeData> {
+        return animeInfoListEntity.map {
+            AnimeData(
+                malId = it.id, // Supongo que 'id' es el equivalente al campo 'malId' en tu entidad
+                url = it.articleUrl ?: "",
+                images = Images(
+                    jpg = ImageType(
+                        imageUrl = it.articleUrl ?: "",
+                        smallImageUrl = "",
+                        largeImageUrl = ""
+                    ),
+                    webp = ImageType(
+                        imageUrl = it.articleUrl ?: "",
+                        smallImageUrl = "",
+                        largeImageUrl = ""
+                    )
+                ),
+                trailer = Trailer(
+                    youtubeId = "",
+                    url = "",
+                    embedUrl = ""
+                ),
+                approved = it.publishedState ?: false,
+                titles = listOf(
+                    Title(
+                        type = "",
+                        title = it.title ?: ""
+                    )
+                ),
+                title = it.title ?: "",
+                titleEnglish = "",
+                titleJapanese = "",
+                titleSynonyms = listOf(),
+                type = "",
+                source = "",
+                episodes = 0,
+                status = "",
+                airing = false,
+                aired = Aired(
+                    from = "",
+                    to = "",
+                    prop = Prop(
+                        from = Date(0, 0, 0),
+                        to = Date(0, 0, 0),
+                        string = ""
+                    )
+                ),
+                duration = "",
+                rating = "",
+                score = 0.0, // Cambiado a Double para permitir decimales
+                scoredBy = 0,
+                rank = 0,
+                popularity = 0,
+                members = 0,
+                favorites = 0,
+                synopsis = "",
+                background = "",
+                season = "",
+                year = 0,
+                broadcast = Broadcast(
+                    day = "",
+                    time = "",
+                    timezone = "",
+                    string = ""
+                ),
+                producers = listOf(),
+                licensors = listOf(),
+                studios = listOf(),
+                genres = listOf(),
+                explicitGenres = listOf(),
+                themes = listOf(),
+                demographics = listOf()
             )
         }
-        return redditList
     }
 
     fun convertArticleModelToArticleEntity(article: Article): ArticleEntity {

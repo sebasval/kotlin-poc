@@ -1,9 +1,10 @@
 package com.app.koltinpoc.di
 
 import com.app.koltinpoc.db.AppDatabase
-import com.app.koltinpoc.di.Transformer.convertEntityRedditListToRedditInfoList
-import com.app.koltinpoc.di.Transformer.convertRedditInfoToRedditInfoEntity
-import com.app.koltinpoc.model.RedditInfo
+import com.app.koltinpoc.di.Transformer.convertAnimeDataToRedditInfoEntity
+import com.app.koltinpoc.di.Transformer.convertEntityRedditListToAnimeDataList
+import com.app.koltinpoc.model.AnimeData
+import com.app.koltinpoc.model.AnimeInfo
 import com.app.koltinpoc.model.RedditListInfo
 import com.app.koltinpoc.utils.DataHandler
 import java.io.IOException
@@ -30,11 +31,11 @@ class DBRepository @Inject constructor(val appDatabase: AppDatabase) {
     }
 
 
-    suspend fun insertRedditInfo(redditInfo: RedditInfo): DataHandler<Unit> {
+    suspend fun insertAnimeInfo(animeInfo: AnimeInfo): DataHandler<Unit> {
         return try {
-            redditInfo.data.children.forEach {
+            animeInfo.data.forEach {
                 appDatabase.redditInfo()
-                    .insert(convertRedditInfoToRedditInfoEntity(it))
+                    .insert(convertAnimeDataToRedditInfoEntity(it))
             }
             DataHandler.SUCCESS(Unit)
         } catch (e: IOException) {
@@ -42,8 +43,8 @@ class DBRepository @Inject constructor(val appDatabase: AppDatabase) {
         }
     }
 
-    suspend fun getAllRedditInfo(): List<RedditListInfo> {
-        return convertEntityRedditListToRedditInfoList(appDatabase.redditInfo().getAllRedditInfo())
+    suspend fun getAllRedditInfo(): List<AnimeData> {
+        return convertEntityRedditListToAnimeDataList(appDatabase.redditInfo().getAllRedditInfo())
     }
 
     suspend fun updateElementState(redditListInfo: RedditListInfo): DataHandler<Unit> {

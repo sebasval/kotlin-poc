@@ -11,6 +11,7 @@ import com.app.koltinpoc.R
 import com.app.koltinpoc.databinding.FragmentOnlineBinding
 import com.app.koltinpoc.utils.DataHandler
 import com.app.koltinpoc.utils.LogData
+import com.app.koltinpoc.view.adapter.HorizontalAdapter
 import com.app.koltinpoc.view.adapter.NewsAdapter
 import com.app.koltinpoc.viewModel.OnlineViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +23,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     private lateinit var binding: FragmentOnlineBinding
 
     @Inject
-    lateinit var newsAdapter: NewsAdapter
+    lateinit var horizontalAdapter: HorizontalAdapter
 
     val viewModel: OnlineViewModel by viewModels()
 
@@ -33,17 +34,19 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
         val state = arguments?.getBoolean("delete_state", false)
 
-        viewModel.topHeadlines.observe(viewLifecycleOwner, { dataHandler ->
+        viewModel.topHeadlines.observe(viewLifecycleOwner) { dataHandler ->
             when (dataHandler) {
                 is DataHandler.SUCCESS -> {
                     binding.progressBar.visibility = View.GONE
-                    newsAdapter.differ.submitList(dataHandler.data)
+                    horizontalAdapter.differ.submitList(dataHandler.data)
                     binding.swipeRefresh.isRefreshing = false
                 }
+
                 is DataHandler.ERROR -> {
                     binding.progressBar.visibility = View.GONE
                     LogData("onViewCreated: ERROR " + dataHandler.message)
                 }
+
                 is DataHandler.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
                     LogData("onViewCreated: LOADING..")
@@ -51,7 +54,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                 }
             }
 
-        })
+        }
 
         if (state!!.not()) {
             viewModel.getTopHeadlines()
@@ -70,7 +73,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             viewModel.deleteAllElements()
         }
 
-        newsAdapter.onArticleClicked {
+        horizontalAdapter.onAnimeInfoClicked {
             val bundle = Bundle().apply {
                 putParcelable("article_data", it)
             }
@@ -81,8 +84,8 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
         }
 
         binding.recyclerView.apply {
-            adapter = newsAdapter
-            layoutManager = LinearLayoutManager(activity)
+            adapter = horizontalAdapter
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
 
     }

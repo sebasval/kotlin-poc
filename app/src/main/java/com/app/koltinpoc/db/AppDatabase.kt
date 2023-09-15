@@ -6,11 +6,11 @@ import androidx.room.TypeConverters
 import com.app.koltinpoc.db.dao.ArticleDao
 import com.app.koltinpoc.db.dao.RedditInfoDao
 import com.app.koltinpoc.db.entity.ArticleEntity
-import com.app.koltinpoc.db.entity.RedittInfoEntity
+import com.app.koltinpoc.db.entity.AnimeInfoEntity
 
 @Database(
     version = 1,
-    entities = [ArticleEntity::class, RedittInfoEntity::class],
+    entities = [ArticleEntity::class, AnimeInfoEntity::class],
 )
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {

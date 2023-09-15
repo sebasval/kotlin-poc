@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.koltinpoc.di.DBRepository
 import com.app.koltinpoc.di.NetworkRepository
-import com.app.koltinpoc.model.RedditInfo
+import com.app.koltinpoc.model.AnimeData
+import com.app.koltinpoc.model.AnimeInfo
 import com.app.koltinpoc.model.RedditListInfo
 import com.app.koltinpoc.utils.DataHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +22,8 @@ class OnlineViewModel @Inject constructor(
     private val dbRepository: DBRepository
 ) : ViewModel() {
 
-    private val _topHeadlines = MutableLiveData<DataHandler<List<RedditListInfo>>>()
-    val topHeadlines: LiveData<DataHandler<List<RedditListInfo>>> = _topHeadlines
+    private val _topHeadlines = MutableLiveData<DataHandler<List<AnimeData>>>()
+    val topHeadlines: LiveData<DataHandler<List<AnimeData>>> = _topHeadlines
 
     fun getTopHeadlines() {
         viewModelScope.launch {
@@ -31,9 +32,9 @@ class OnlineViewModel @Inject constructor(
         }
     }
 
-    private fun handleResponse(response: Response<RedditInfo>) {
+    private fun handleResponse(response: Response<AnimeInfo>) {
         if (response.isSuccessful) {
-            response.body()?.let { it ->
+            response.body()?.let {
                 saveRedditInfo(it)
             }
         }
@@ -46,9 +47,9 @@ class OnlineViewModel @Inject constructor(
         }
     }
 
-    private fun saveRedditInfo(redditInfo: RedditInfo) {
+    private fun saveRedditInfo(animeInfo: AnimeInfo) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = dbRepository.insertRedditInfo(redditInfo)) {
+            when (val result = dbRepository.insertAnimeInfo(animeInfo)) {
                 is DataHandler.SUCCESS -> {
                     val data = dbRepository.getAllRedditInfo()
                     _topHeadlines.postValue(DataHandler.SUCCESS(data))

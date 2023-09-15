@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.koltinpoc.R
 import com.app.koltinpoc.databinding.AdapterNewsItemBinding
-import com.app.koltinpoc.model.Article
-import com.app.koltinpoc.model.RedditListInfo
+import com.app.koltinpoc.model.AnimeInfo
 import com.app.koltinpoc.utils.loadImageFromGlide
 import javax.inject.Inject
 
@@ -19,15 +18,16 @@ class NewsAdapter @Inject constructor(val context: Context) :
     inner class ViewHolder(val binding: AdapterNewsItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    private val diffUtil = object : DiffUtil.ItemCallback<RedditListInfo>() {
-        override fun areItemsTheSame(oldItem: RedditListInfo, newItem: RedditListInfo): Boolean {
-            return oldItem.data.title == newItem.data.title
+    private val diffUtil = object : DiffUtil.ItemCallback<AnimeInfo>() {
+        override fun areItemsTheSame(oldItem: AnimeInfo, newItem: AnimeInfo): Boolean {
+            // Comparar elementos individuales en la lista data por su malId
+            return oldItem.data.zip(newItem.data).all { (old, new) -> old.malId == new.malId }
         }
 
-        override fun areContentsTheSame(oldItem: RedditListInfo, newItem: RedditListInfo): Boolean {
+        override fun areContentsTheSame(oldItem: AnimeInfo, newItem: AnimeInfo): Boolean {
+            // Comparar objetos AnimeInfo completos para verificar igualdad
             return oldItem == newItem
         }
-
     }
 
     val differ = AsyncListDiffer(this, diffUtil)
@@ -39,33 +39,38 @@ class NewsAdapter @Inject constructor(val context: Context) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val article = differ.currentList[position]
-        holder.binding.apply {
-            ivArticle.loadImageFromGlide(article.data.thumbnail)
-            tvTitle.text = article.data.title
-            tvDescription.text = article.data.subreddit
-            val comments = "${article.data.commentsCount} Commented this post"
-            tvPublished.text = comments
-            if (article.data.readStatus) {
-                tvSource.text = context.getString(R.string.read_post)
+        val animeInfo = differ.currentList[position]
+
+        // Verificar si la lista 'data' tiene elementos antes de intentar acceder a ellos
+        if (position < animeInfo.data.size) {
+            val animeData = animeInfo.data[position]
+
+            holder.binding.apply {
+                ivArticle.loadImageFromGlide(animeData.images.jpg.imageUrl)
+                tvTitle.text = animeData.title
+                tvDescription.text = animeData.source
+                val comments = "${animeData.scoredBy} Users Scored"
+                tvPublished.text = comments
+                if (animeData.approved) {
+                    tvSource.text = context.getString(R.string.read_post)
+                }
+            }
+
+            holder.itemView.setOnClickListener {
+                setAnimeInfoClickListener?.let {
+                    it(animeInfo)
+                }
             }
         }
-
-        holder.itemView.setOnClickListener {
-            setArticleClickListener?.let {
-                it(article)
-            }
-        }
-
     }
 
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
 
-    private var setArticleClickListener: ((article: RedditListInfo) -> Unit)? = null
+    private var setAnimeInfoClickListener: ((animeInfo: AnimeInfo) -> Unit)? = null
 
-    fun onArticleClicked(listener: (RedditListInfo) -> Unit) {
-        setArticleClickListener = listener
+    fun onAnimeInfoClicked(listener: (AnimeInfo) -> Unit) {
+        setAnimeInfoClickListener = listener
     }
 }

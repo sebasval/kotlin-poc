@@ -1,13 +1,11 @@
 package com.app.koltinpoc.api
 
-import com.app.koltinpoc.model.NewResponse
-import com.app.koltinpoc.model.RedditInfo
+import com.app.koltinpoc.model.AnimeInfo
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface TopHeadlinesApi {
 
-    @GET("popular/top/.json")
-    suspend fun getTopHeadlines(): Response<RedditInfo>
+    @GET("top/anime")
+    suspend fun getTopHeadlines(): Response<AnimeInfo>
 }

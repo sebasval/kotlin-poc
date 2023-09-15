@@ -19,10 +19,16 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+        packagingOptions{
+            exclude 'META-INF/androidsupportmultidexversion.txt'
+        }
     }
 
     buildFeatures{
         viewBinding true
+        dataBinding true
     }
 
     buildTypes {
@@ -89,6 +95,9 @@ dependencies {
 
     //SwipeRefresh Layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+
+
 
 
 
