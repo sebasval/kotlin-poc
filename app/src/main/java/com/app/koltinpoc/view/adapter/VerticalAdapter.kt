@@ -44,7 +44,7 @@ class VerticalAdapter @Inject constructor(val context: Context) :
             liveStateSeason.text = if (item.airing) "Airing" else "Not Airing"
             titleSeason.text = item.title
             episodeSeason.text = item.episodes.toString()
-            dateSeason.text = item.aired.toString()
+            dateSeason.text = item.aired.from
         }
         holder.binding.executePendingBindings()
     }

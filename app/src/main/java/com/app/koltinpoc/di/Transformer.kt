@@ -39,7 +39,8 @@ object Transformer {
             title = animeData.title,
             liveState = if (animeData.airing) "Airing" else "Not Airing",
             episode = animeData.episodes.toString(),
-            date = animeData.aired.toString()
+            date = animeData.aired.toString(),
+            rating = animeData.rating
         )
     }
 
@@ -50,7 +51,7 @@ object Transformer {
                 url = entity.articleUrl ?: "",
                 images = Images(
                     jpg = ImageType(
-                        imageUrl = "",
+                        imageUrl = entity.articleUrl,
                         smallImageUrl = "",
                         largeImageUrl = ""
                     ),
@@ -99,7 +100,7 @@ object Transformer {
                     )
                 ),
                 duration = "",
-                rating = "",
+                rating = entity.rating ?: "No rating",
                 scoredBy = 0,
                 rank = 0,
                 popularity = 0,
