@@ -18,4 +18,8 @@ interface AnimeSeasonsNowInfoDao {
 
     @Query("DELETE FROM seasons_now")
     suspend fun deleteAll()
+
+    @Query("SELECT * FROM SEASONS_NOW WHERE title LIKE :title LIMIT 1")
+    suspend fun findAnimeByTitle(title: String): AnimeSeasonsNowInfoEntity?
+
 }

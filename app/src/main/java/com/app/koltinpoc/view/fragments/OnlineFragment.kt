@@ -1,7 +1,9 @@
 package com.app.koltinpoc.view.fragments
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -86,6 +88,38 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
         }
 
+        viewModel.animeSearched.observe(viewLifecycleOwner) { dataHandler ->
+            when (dataHandler) {
+                is DataHandler.SUCCESS -> {
+                    binding.progressBar.visibility = View.GONE
+                    val bundle = Bundle().apply {
+                        putParcelable("article_data", dataHandler.data)
+                    }
+                    findNavController().navigate(
+                        R.id.action_onlineFragment_to_articleDetailsFragment,
+                        bundle
+                    )
+                    binding.swipeRefresh.isRefreshing = false
+                }
+
+                is DataHandler.ERROR -> {
+                    binding.progressBar.visibility = View.GONE
+                    LogData("onViewCreated: ERROR " + dataHandler.message)
+                    val toast = Toast.makeText(requireContext(), "No se encontro el anime", Toast.LENGTH_SHORT)
+                    toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
+                    toast.show()
+                }
+
+                is DataHandler.LOADING -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    LogData("onViewCreated: LOADING..")
+
+                }
+            }
+
+        }
+
+
 
         if (state!!.not()) {
             viewModel.getAnimeTop()
@@ -125,15 +159,24 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
         val searchView = binding.searchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // Código para manejar la consulta de búsqueda
+                manageQuery(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Código para manejar cambios en el texto de búsqueda
                 return true
             }
         })
+    }
 
+    private fun manageQuery(query: String?) {
+        if (query.isNullOrEmpty()) {
+            val toast = Toast.makeText(requireContext(), "Escribe un anime", Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
+            toast.show()
+
+        } else {
+            viewModel.searchAnimeByTitle(query)
+        }
     }
 }

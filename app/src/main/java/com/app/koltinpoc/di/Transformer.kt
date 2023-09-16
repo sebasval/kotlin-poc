@@ -44,7 +44,7 @@ object Transformer {
         )
     }
 
-    fun convertAnimeInfoEntitiesToAnimeData(animeEntities: List<AnimeSeasonsNowInfoEntity>): List<AnimeData> {
+    fun convertAnimeInfoEntitiesListToAnimeDataList(animeEntities: List<AnimeSeasonsNowInfoEntity>): List<AnimeData> {
         return animeEntities.map { entity ->
             AnimeData(
                 malId = 0,
@@ -126,6 +126,90 @@ object Transformer {
             )
         }
     }
+
+    fun convertAnimeInfoEntitiesToAnimeData(animeEntities: AnimeSeasonsNowInfoEntity): AnimeData {
+        return animeEntities.let { entity ->
+            AnimeData(
+                malId = 0,
+                url = entity.articleUrl ?: "",
+                images = Images(
+                    jpg = ImageType(
+                        imageUrl = entity.articleUrl,
+                        smallImageUrl = "",
+                        largeImageUrl = ""
+                    ),
+                    webp = ImageType(
+                        imageUrl = "",
+                        smallImageUrl = "",
+                        largeImageUrl = ""
+                    )
+                ),
+                trailer = Trailer(
+                    youtubeId = "",
+                    url = "",
+                    embedUrl = ""
+                ),
+                approved = false,
+                titles = listOf(
+                    Title(
+                        title = "",
+                        type = "",
+                    )
+                ),
+                title = entity.title ?: "",
+                titleEnglish = "",
+                titleJapanese = "",
+                titleSynonyms = listOf(),
+                type = "",
+                source = "",
+                episodes = entity.episode?.toInt() ?: 0,
+                status = "",
+                airing = entity.liveState == "Airing",
+                aired = Aired(
+                    from = "",
+                    to = "",
+                    prop = Prop(
+                        from = Date(
+                            day = 0,
+                            month = 0,
+                            year = 0
+                        ),
+                        to = Date(
+                            day = 0,
+                            month = 0,
+                            year = 0
+                        ),
+                        string = ""
+                    )
+                ),
+                duration = "",
+                rating = entity.rating ?: "No rating",
+                scoredBy = 0,
+                rank = 0,
+                popularity = 0,
+                members = 0,
+                favorites = 0,
+                synopsis = "",
+                background = "",
+                season = "",
+                year = 0,
+                broadcast = Broadcast(
+                    day = "",
+                    time = "",
+                    timezone = "",
+                    string = ""
+                ),
+                producers = listOf(),
+                licensors = listOf(),
+                studios = listOf(),
+                genres = listOf(),
+                explicitGenres = listOf(),
+                themes = listOf(),
+                demographics = listOf()
+            )
+        }
+    }
+
 
 
     fun convertEntityRedditListToAnimeDataList(animeInfoListEntity: List<AnimeInfoEntity>): List<AnimeData> {

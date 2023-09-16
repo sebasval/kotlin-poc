@@ -27,6 +27,9 @@ class OnlineViewModel @Inject constructor(
     private val _animeSeasonsNowTop = MutableLiveData<DataHandler<List<AnimeData>>>()
     val animeSeasonsNowTop: LiveData<DataHandler<List<AnimeData>>> = _animeSeasonsNowTop
 
+    private val _animeSearched = MutableLiveData<DataHandler<AnimeData>>()
+    val animeSearched: LiveData<DataHandler<AnimeData>> = _animeSearched
+
     fun getAnimeTop() {
         viewModelScope.launch {
             val response = networkRepository.getAnimeTop()
@@ -98,6 +101,20 @@ class OnlineViewModel @Inject constructor(
                 }
                 is DataHandler.ERROR -> {
                     _animeSeasonsNowTop.postValue(DataHandler.ERROR(message = result.message.toString()))
+                }
+                else -> {}
+            }
+        }
+    }
+
+     fun searchAnimeByTitle(title:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            when(val result = dbRepository.searchAnimeByTitle(title)){
+                is DataHandler.SUCCESS ->{
+                    _animeSearched.postValue(result)
+                }
+                is DataHandler.ERROR ->{
+                    _animeSearched.postValue(DataHandler.ERROR(message = result.message.toString()))
                 }
                 else -> {}
             }

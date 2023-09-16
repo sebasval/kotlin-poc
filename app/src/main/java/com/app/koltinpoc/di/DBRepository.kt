@@ -2,6 +2,7 @@ package com.app.koltinpoc.di
 
 import com.app.koltinpoc.db.AppDatabase
 import com.app.koltinpoc.di.Transformer.convertAnimeDataToAnimeInfoEntity
+import com.app.koltinpoc.di.Transformer.convertAnimeInfoEntitiesListToAnimeDataList
 import com.app.koltinpoc.di.Transformer.convertAnimeInfoEntitiesToAnimeData
 import com.app.koltinpoc.di.Transformer.convertAnimeSeasonsNowDataToAnimeInfoEntity
 import com.app.koltinpoc.di.Transformer.convertEntityRedditListToAnimeDataList
@@ -57,12 +58,25 @@ class DBRepository @Inject constructor(val appDatabase: AppDatabase) {
         }
     }
 
+    suspend fun searchAnimeByTitle(title: String): DataHandler<AnimeData> {
+        return try {
+            val anime = appDatabase.animeSeasonsNowInfo().findAnimeByTitle(title)
+            anime?.let {
+                DataHandler.SUCCESS(convertAnimeInfoEntitiesToAnimeData(it))
+            } ?: DataHandler.ERROR(message = "Anime no encontrado")
+        } catch (e: Exception) {
+            DataHandler.ERROR(message = "Ocurrió un error durante la búsqueda")
+        }
+    }
+
 
     suspend fun getAllAnimeInfo(): List<AnimeData> {
         return convertEntityRedditListToAnimeDataList(appDatabase.animeInfo().getAllRedditInfo())
     }
 
     suspend fun getAllSeasonsAnimeInfo(): List<AnimeData> {
-        return convertAnimeInfoEntitiesToAnimeData(appDatabase.animeSeasonsNowInfo().getAllSeasonsNowInfo())
+        return convertAnimeInfoEntitiesListToAnimeDataList(
+            appDatabase.animeSeasonsNowInfo().getAllSeasonsNowInfo()
+        )
     }
 }
