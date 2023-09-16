@@ -9,8 +9,12 @@ class NetworkRepository @Inject constructor(
     val topHeadlinesApi: TopHeadlinesApi
 ) {
 
-    suspend fun getTopHeadlines(): Response<AnimeInfo> {
-        return topHeadlinesApi.getTopHeadlines()
+    suspend fun getAnimeTop(): Response<AnimeInfo> {
+        return topHeadlinesApi.getAnimeTop()
+    }
+
+    suspend fun getAnimeSeasonsNow(): Response<AnimeInfo> {
+        return topHeadlinesApi.getAnimeSeasonNow()
     }
 
 }

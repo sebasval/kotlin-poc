@@ -37,12 +37,6 @@ class ArticleDetailsFragment : Fragment(R.layout.fragment_article_details) {
             }
         }
 
-        viewModel.updateReadStatus(article!!)
-
-        binding.fab.setOnClickListener {
-            viewModel.deleteElement(article)
-        }
-
         binding.backToList.setOnClickListener {
             val bundle = bundleOf("delete_state" to true)
             findNavController().navigate(
@@ -51,7 +45,7 @@ class ArticleDetailsFragment : Fragment(R.layout.fragment_article_details) {
             )
         }
 
-        viewModel.deleteState.observe(viewLifecycleOwner, {
+        viewModel.deleteState.observe(viewLifecycleOwner) {
             if (it) {
                 val bundle = bundleOf("delete_state" to true)
                 findNavController().navigate(
@@ -63,6 +57,6 @@ class ArticleDetailsFragment : Fragment(R.layout.fragment_article_details) {
                 Snackbar.make(binding.root, "Could not delete element ", Snackbar.LENGTH_LONG)
                     .show()
             }
-        })
+        }
     }
 }

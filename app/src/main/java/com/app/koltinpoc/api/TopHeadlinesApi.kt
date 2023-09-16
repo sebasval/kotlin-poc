@@ -7,5 +7,8 @@ import retrofit2.http.GET
 interface TopHeadlinesApi {
 
     @GET("top/anime")
-    suspend fun getTopHeadlines(): Response<AnimeInfo>
+    suspend fun getAnimeTop(): Response<AnimeInfo>
+
+    @GET("seasons/now")
+    suspend fun getAnimeSeasonNow(): Response<AnimeInfo>
 }

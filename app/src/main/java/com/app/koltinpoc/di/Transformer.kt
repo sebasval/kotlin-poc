@@ -2,17 +2,15 @@ package com.app.koltinpoc.di
 
 import com.app.koltinpoc.db.entity.ArticleEntity
 import com.app.koltinpoc.db.entity.AnimeInfoEntity
+import com.app.koltinpoc.db.entity.AnimeSeasonsNowInfoEntity
 import com.app.koltinpoc.db.entity.SourceEntity
 import com.app.koltinpoc.model.Aired
 import com.app.koltinpoc.model.AnimeData
-import com.app.koltinpoc.model.AnimeInfo
 import com.app.koltinpoc.model.Article
 import com.app.koltinpoc.model.Broadcast
 import com.app.koltinpoc.model.Date
 import com.app.koltinpoc.model.ImageType
 import com.app.koltinpoc.model.Images
-import com.app.koltinpoc.model.Items
-import com.app.koltinpoc.model.Pagination
 import com.app.koltinpoc.model.Prop
 import com.app.koltinpoc.model.Source
 import com.app.koltinpoc.model.Title
@@ -26,15 +24,108 @@ import com.app.koltinpoc.model.Trailer
 * */
 object Transformer {
 
-    fun convertAnimeDataToRedditInfoEntity(animeData: AnimeData): AnimeInfoEntity {
+    fun convertAnimeDataToAnimeInfoEntity(animeData: AnimeData): AnimeInfoEntity {
         return AnimeInfoEntity(
             articleUrl = animeData.images.jpg.imageUrl,
             title = animeData.title,
             description = animeData.source,
             publishedState = animeData.airing,
-            commentsCount = animeData.score.toString()
         )
     }
+
+    fun convertAnimeSeasonsNowDataToAnimeInfoEntity(animeData: AnimeData): AnimeSeasonsNowInfoEntity {
+        return AnimeSeasonsNowInfoEntity(
+            articleUrl = animeData.images.jpg.imageUrl,
+            title = animeData.title,
+            liveState = if (animeData.airing) "Airing" else "Not Airing",
+            episode = animeData.episodes.toString(),
+            date = animeData.aired.toString()
+        )
+    }
+
+    fun convertAnimeInfoEntitiesToAnimeData(animeEntities: List<AnimeSeasonsNowInfoEntity>): List<AnimeData> {
+        return animeEntities.map { entity ->
+            AnimeData(
+                malId = 0,
+                url = entity.articleUrl ?: "",
+                images = Images(
+                    jpg = ImageType(
+                        imageUrl = "",
+                        smallImageUrl = "",
+                        largeImageUrl = ""
+                    ),
+                    webp = ImageType(
+                        imageUrl = "",
+                        smallImageUrl = "",
+                        largeImageUrl = ""
+                    )
+                ),
+                trailer = Trailer(
+                    youtubeId = "",
+                    url = "",
+                    embedUrl = ""
+                ),
+                approved = false,
+                titles = listOf(
+                    Title(
+                        title = "",
+                        type = "",
+                    )
+                ),
+                title = entity.title ?: "",
+                titleEnglish = "",
+                titleJapanese = "",
+                titleSynonyms = listOf(),
+                type = "",
+                source = "",
+                episodes = entity.episode?.toInt() ?: 0,
+                status = "",
+                airing = entity.liveState == "Airing",
+                aired = Aired(
+                    from = "",
+                    to = "",
+                    prop = Prop(
+                        from = Date(
+                            day = 0,
+                            month = 0,
+                            year = 0
+                        ),
+                        to = Date(
+                            day = 0,
+                            month = 0,
+                            year = 0
+                        ),
+                        string = ""
+                    )
+                ),
+                duration = "",
+                rating = "",
+                scoredBy = 0,
+                rank = 0,
+                popularity = 0,
+                members = 0,
+                favorites = 0,
+                synopsis = "",
+                background = "",
+                season = "",
+                year = 0,
+                broadcast = Broadcast(
+                    day = "",
+                    time = "",
+                    timezone = "",
+                    string = ""
+                ),
+                producers = listOf(),
+                licensors = listOf(),
+                studios = listOf(),
+                genres = listOf(),
+                explicitGenres = listOf(),
+                themes = listOf(),
+                demographics = listOf()
+            )
+        }
+    }
+
 
     fun convertEntityRedditListToAnimeDataList(animeInfoListEntity: List<AnimeInfoEntity>): List<AnimeData> {
         return animeInfoListEntity.map {
@@ -85,7 +176,6 @@ object Transformer {
                 ),
                 duration = "",
                 rating = "",
-                score = 0.0, // Cambiado a Double para permitir decimales
                 scoredBy = 0,
                 rank = 0,
                 popularity = 0,

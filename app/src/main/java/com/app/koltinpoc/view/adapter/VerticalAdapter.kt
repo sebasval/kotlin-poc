@@ -6,16 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.app.koltinpoc.databinding.AdapterHorizontalItemBinding
+import com.app.koltinpoc.databinding.AdapterVerticalItemBinding
 import com.app.koltinpoc.model.AnimeData
 import com.app.koltinpoc.model.AnimeInfo
 import com.app.koltinpoc.utils.loadImageFromGlide
 import javax.inject.Inject
 
-class HorizontalAdapter @Inject constructor(val context: Context) :
-    RecyclerView.Adapter<HorizontalAdapter.ViewHolder>() {
+class VerticalAdapter @Inject constructor(val context: Context) :
+    RecyclerView.Adapter<VerticalAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binding: AdapterHorizontalItemBinding) :
+    inner class ViewHolder(val binding: AdapterVerticalItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     private val diffUtil = object : DiffUtil.ItemCallback<AnimeData>() {
@@ -32,15 +32,19 @@ class HorizontalAdapter @Inject constructor(val context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            AdapterHorizontalItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            AdapterVerticalItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = differ.currentList[position]
         holder.binding.apply {
-            ivHorizontalImage.loadImageFromGlide(item.images.jpg.imageUrl)
-            tvHorizontalTitle.text = item.title
+
+            imageViewVerticalItem.loadImageFromGlide(item.images.jpg.imageUrl)
+            liveStateSeason.text = if (item.airing) "Airing" else "Not Airing"
+            titleSeason.text = item.title
+            episodeSeason.text = item.episodes.toString()
+            dateSeason.text = item.aired.toString()
         }
         holder.binding.executePendingBindings()
     }
@@ -54,5 +58,4 @@ class HorizontalAdapter @Inject constructor(val context: Context) :
     fun onAnimeInfoClicked(listener: (AnimeInfo) -> Unit) {
         setAnimeInfoClickListener = listener
     }
-
 }

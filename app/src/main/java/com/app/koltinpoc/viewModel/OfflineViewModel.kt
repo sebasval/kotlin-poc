@@ -30,15 +30,4 @@ class OfflineViewModel @Inject constructor(private val dbRepository: DBRepositor
         }
     }
 
-    fun updateReadStatus(redditListInfo: RedditListInfo) {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val result = dbRepository.updateElementState(redditListInfo)) {
-                is DataHandler.SUCCESS -> {}
-                is DataHandler.ERROR -> {
-                    Log.v("update_error", result.message.toString())
-                }
-                else -> {}
-            }
-        }
-    }
 }

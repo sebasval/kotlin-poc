@@ -1,7 +1,9 @@
 package com.app.koltinpoc.di
 
 import com.app.koltinpoc.db.AppDatabase
-import com.app.koltinpoc.di.Transformer.convertAnimeDataToRedditInfoEntity
+import com.app.koltinpoc.di.Transformer.convertAnimeDataToAnimeInfoEntity
+import com.app.koltinpoc.di.Transformer.convertAnimeInfoEntitiesToAnimeData
+import com.app.koltinpoc.di.Transformer.convertAnimeSeasonsNowDataToAnimeInfoEntity
 import com.app.koltinpoc.di.Transformer.convertEntityRedditListToAnimeDataList
 import com.app.koltinpoc.model.AnimeData
 import com.app.koltinpoc.model.AnimeInfo
@@ -14,7 +16,7 @@ class DBRepository @Inject constructor(val appDatabase: AppDatabase) {
 
     suspend fun deleteElementByName(redditListInfo: RedditListInfo): DataHandler<Unit> {
         return try {
-            appDatabase.redditInfo().delete(redditListInfo.data.subreddit)
+            appDatabase.animeInfo().delete(redditListInfo.data.subreddit)
             DataHandler.SUCCESS(Unit)
         } catch (e: IOException) {
             DataHandler.ERROR(message = "Could not delete element")
@@ -23,7 +25,7 @@ class DBRepository @Inject constructor(val appDatabase: AppDatabase) {
 
     suspend fun deleteAllElements(): DataHandler<Unit> {
         return try {
-            appDatabase.redditInfo().deleteAll()
+            appDatabase.animeInfo().deleteAll()
             DataHandler.SUCCESS(Unit)
         } catch (e: IOException) {
             DataHandler.ERROR(message = "could not delete all elements")
@@ -34,8 +36,8 @@ class DBRepository @Inject constructor(val appDatabase: AppDatabase) {
     suspend fun insertAnimeInfo(animeInfo: AnimeInfo): DataHandler<Unit> {
         return try {
             animeInfo.data.forEach {
-                appDatabase.redditInfo()
-                    .insert(convertAnimeDataToRedditInfoEntity(it))
+                appDatabase.animeInfo()
+                    .insert(convertAnimeDataToAnimeInfoEntity(it))
             }
             DataHandler.SUCCESS(Unit)
         } catch (e: IOException) {
@@ -43,16 +45,24 @@ class DBRepository @Inject constructor(val appDatabase: AppDatabase) {
         }
     }
 
-    suspend fun getAllRedditInfo(): List<AnimeData> {
-        return convertEntityRedditListToAnimeDataList(appDatabase.redditInfo().getAllRedditInfo())
-    }
-
-    suspend fun updateElementState(redditListInfo: RedditListInfo): DataHandler<Unit> {
+    suspend fun insertAnimeSeasonsNowInfo(animeInfo: AnimeInfo): DataHandler<Unit> {
         return try {
-            appDatabase.redditInfo().updateReadStatusElement(redditListInfo.data.idElement.toInt(), true)
+            animeInfo.data.forEach {
+                appDatabase.animeSeasonsNowInfo()
+                    .insert(convertAnimeSeasonsNowDataToAnimeInfoEntity(it))
+            }
             DataHandler.SUCCESS(Unit)
         } catch (e: IOException) {
-            DataHandler.ERROR(message = e.message.toString())
+            DataHandler.ERROR(message = "Could not save items")
         }
+    }
+
+
+    suspend fun getAllAnimeInfo(): List<AnimeData> {
+        return convertEntityRedditListToAnimeDataList(appDatabase.animeInfo().getAllRedditInfo())
+    }
+
+    suspend fun getAllSeasonsAnimeInfo(): List<AnimeData> {
+        return convertAnimeInfoEntitiesToAnimeData(appDatabase.animeSeasonsNowInfo().getAllSeasonsNowInfo())
     }
 }

@@ -5,14 +5,13 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.koltinpoc.R
 import com.app.koltinpoc.databinding.FragmentOnlineBinding
 import com.app.koltinpoc.utils.DataHandler
 import com.app.koltinpoc.utils.LogData
 import com.app.koltinpoc.view.adapter.HorizontalAdapter
-import com.app.koltinpoc.view.adapter.NewsAdapter
+import com.app.koltinpoc.view.adapter.VerticalAdapter
 import com.app.koltinpoc.viewModel.OnlineViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -25,6 +24,9 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     @Inject
     lateinit var horizontalAdapter: HorizontalAdapter
 
+    @Inject
+    lateinit var verticalAdapter: VerticalAdapter
+
     val viewModel: OnlineViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,7 +36,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
         val state = arguments?.getBoolean("delete_state", false)
 
-        viewModel.topHeadlines.observe(viewLifecycleOwner) { dataHandler ->
+        viewModel.animeTop.observe(viewLifecycleOwner) { dataHandler ->
             when (dataHandler) {
                 is DataHandler.SUCCESS -> {
                     binding.progressBar.visibility = View.GONE
@@ -56,17 +58,42 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
 
         }
 
+        viewModel.animeSeasonsNowTop.observe(viewLifecycleOwner) { dataHandler ->
+            when (dataHandler) {
+                is DataHandler.SUCCESS -> {
+                    binding.progressBar.visibility = View.GONE
+                    verticalAdapter.differ.submitList(dataHandler.data)
+                    binding.swipeRefresh.isRefreshing = false
+                }
+
+                is DataHandler.ERROR -> {
+                    binding.progressBar.visibility = View.GONE
+                    LogData("onViewCreated: ERROR " + dataHandler.message)
+                }
+
+                is DataHandler.LOADING -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    LogData("onViewCreated: LOADING..")
+
+                }
+            }
+
+        }
+
+
         if (state!!.not()) {
-            viewModel.getTopHeadlines()
+            viewModel.getAnimeTop()
+            viewModel.getAnimeSeasonsNow()
         } else {
-            viewModel.getAllLocalRedditInfo()
+            viewModel.getAllLocalAnimeInfo()
+            viewModel.getAllLocalAnimeSeasonNowInfo()
         }
     }
 
     private fun init() {
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.getTopHeadlines()
+            viewModel.getAnimeTop()
         }
 
         binding.onlineFab.setOnClickListener {
@@ -86,6 +113,11 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
         binding.recyclerView.apply {
             adapter = horizontalAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        binding.recyclerviewAnimeNewestSeasons.apply {
+            adapter = verticalAdapter
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         }
 
     }

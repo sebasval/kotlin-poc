@@ -48,8 +48,6 @@ data class AnimeData(
     val duration: String,
     @SerializedName("rating")
     val rating: String,
-    @SerializedName("score")
-    val score: Double,
     @SerializedName("scored_by")
     val scoredBy: Int,
     @SerializedName("rank")
