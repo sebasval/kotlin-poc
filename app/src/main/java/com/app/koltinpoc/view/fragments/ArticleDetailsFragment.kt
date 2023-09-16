@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.app.koltinpoc.R
 import com.app.koltinpoc.databinding.FragmentArticleDetailsBinding
+import com.app.koltinpoc.utils.loadImageFromGlide
 import com.app.koltinpoc.viewModel.OfflineViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,22 +29,24 @@ class ArticleDetailsFragment : Fragment(R.layout.fragment_article_details) {
 
         activity?.onBackPressedDispatcher?.addCallback {}
 
-        val article = args.articleData
+        val animeData = args.articleData
         binding = FragmentArticleDetailsBinding.bind(view)
-        binding.webview.apply {
-            webChromeClient = WebChromeClient()
-            article?.let { data ->
-                loadUrl(data.data.thumbnail)
+
+        binding.apply {
+            animeData?.let { data ->
+                imageView.loadImageFromGlide(data.images.jpg.imageUrl)
+                title.text = data.title
+                rating.text = data.rating
+                liveState.text = if (data.airing) "Al aire" else "No al aire"
+            }
+
+            backToList.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_detailFragment_to_onlineFragment
+                )
             }
         }
 
-        binding.backToList.setOnClickListener {
-            val bundle = bundleOf("delete_state" to true)
-            findNavController().navigate(
-                R.id.action_detailFragment_to_onlineFragment,
-                bundle
-            )
-        }
 
         viewModel.deleteState.observe(viewLifecycleOwner) {
             if (it) {

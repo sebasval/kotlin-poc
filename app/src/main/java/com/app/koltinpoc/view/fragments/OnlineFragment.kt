@@ -96,11 +96,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             viewModel.getAnimeTop()
         }
 
-        binding.onlineFab.setOnClickListener {
-            viewModel.deleteAllElements()
-        }
-
-        horizontalAdapter.onAnimeInfoClicked {
+        verticalAdapter.onAnimeInfoClicked {
             val bundle = Bundle().apply {
                 putParcelable("article_data", it)
             }

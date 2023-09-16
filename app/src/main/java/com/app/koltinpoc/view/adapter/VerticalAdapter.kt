@@ -47,15 +47,21 @@ class VerticalAdapter @Inject constructor(val context: Context) :
             dateSeason.text = item.aired.from
         }
         holder.binding.executePendingBindings()
+
+        holder.itemView.setOnClickListener {
+            setAnimeInfoClickListener?.let {
+                it(item)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
 
-    private var setAnimeInfoClickListener: ((animeInfo: AnimeInfo) -> Unit)? = null
+    private var setAnimeInfoClickListener: ((animeInfo: AnimeData) -> Unit)? = null
 
-    fun onAnimeInfoClicked(listener: (AnimeInfo) -> Unit) {
+    fun onAnimeInfoClicked(listener: (AnimeData) -> Unit) {
         setAnimeInfoClickListener = listener
     }
 }
