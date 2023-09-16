@@ -2,6 +2,8 @@ package com.app.koltinpoc.view.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -32,6 +34,10 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentOnlineBinding.bind(view)
+        val toolbar = binding.toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+
         init()
 
         val state = arguments?.getBoolean("delete_state", false)
@@ -115,6 +121,19 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             adapter = verticalAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         }
+
+        val searchView = binding.searchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Código para manejar la consulta de búsqueda
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Código para manejar cambios en el texto de búsqueda
+                return true
+            }
+        })
 
     }
 }
