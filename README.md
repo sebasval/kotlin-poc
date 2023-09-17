@@ -18,5 +18,4 @@ Hilt
 I decided use a courutines for that :)
 
 ## Features
-This app use a reddit API for fetch info and save locally, we can delete all or by element id, so we can update the status read of the element navigating to
-the details page, we can use a swipe for refresh info
+This app use a Anime API for fetch info and save locally, the details page, we can use a swipe for refresh info and search by title anime using the searchBar
