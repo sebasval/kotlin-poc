@@ -157,6 +157,7 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
         }
 
         val searchView = binding.searchView
+        searchView.setQuery("Jujutsu Kaisen 2nd Season",false)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 manageQuery(query)
