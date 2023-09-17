@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.koltinpoc.R
@@ -95,9 +96,16 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
                     val bundle = Bundle().apply {
                         putParcelable("article_data", dataHandler.data)
                     }
+                    val navOptions = NavOptions.Builder()
+                        .setEnterAnim(R.anim.slide_in_right)
+                        .setExitAnim(R.anim.slide_out_left)
+                        .setPopEnterAnim(R.anim.slide_in_left)
+                        .setPopExitAnim(R.anim.slide_out_right)
+                        .build()
                     findNavController().navigate(
                         R.id.action_onlineFragment_to_articleDetailsFragment,
-                        bundle
+                        bundle,
+                        navOptions
                     )
                     binding.swipeRefresh.isRefreshing = false
                 }
@@ -140,9 +148,17 @@ class OnlineFragment : Fragment(R.layout.fragment_online) {
             val bundle = Bundle().apply {
                 putParcelable("article_data", it)
             }
+
+            val navOptions = NavOptions.Builder()
+                .setEnterAnim(R.anim.slide_in_right)
+                .setExitAnim(R.anim.slide_out_left)
+                .setPopEnterAnim(R.anim.slide_in_left)
+                .setPopExitAnim(R.anim.slide_out_right)
+                .build()
             findNavController().navigate(
                 R.id.action_onlineFragment_to_articleDetailsFragment,
-                bundle
+                bundle,
+                navOptions
             )
         }
 
